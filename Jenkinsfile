@@ -10,7 +10,7 @@ pipeline {
         
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/Only1JohnN/Netflix-CI-CD.git'
+                git branch: "${env.CHANGE_TARGET}", url: 'https://github.com/Only1JohnN/Netflix-CI-CD.git'
             }
         }
         
@@ -30,4 +30,15 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+            // Add any success notifications or actions here
+        }
+        failure {
+            echo 'Pipeline failed!'
+            // Add any failure notifications or actions here
+        }
+    }
+    
 }
