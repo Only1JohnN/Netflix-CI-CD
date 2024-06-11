@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        // Set the GitHub repository URL
         GIT_URL = 'https://github.com/Only1JohnN/Netflix-CI-CD.git'
     }
 
@@ -26,7 +27,7 @@ pipeline {
                             doGenerateSubmoduleConfigurations: false,
                             extensions: [[$class: 'CleanCheckout']],
                             submoduleCfg: [],
-                            userRemoteConfigs: [[url: env.GIT_URL, credentialsId: 'your-credentials-id']]
+                            userRemoteConfigs: [[url: env.GIT_URL]]
                         ])
                     } else {
                         // This is not a pull request
@@ -37,7 +38,7 @@ pipeline {
                             doGenerateSubmoduleConfigurations: false,
                             extensions: [[$class: 'CleanCheckout']],
                             submoduleCfg: [],
-                            userRemoteConfigs: [[url: env.GIT_URL, credentialsId: 'your-credentials-id']]
+                            userRemoteConfigs: [[url: env.GIT_URL]]
                         ])
                     }
                 }
@@ -47,6 +48,8 @@ pipeline {
         stage('Hello') {
             steps {
                 echo 'Hello World from Jenkins Pipeline'
+                //echo java -version
+                //echo 'git --version'
             }
         }
         
@@ -62,10 +65,11 @@ pipeline {
     post {
         success {
             echo 'Pipeline succeeded!'
+            // Add any success notifications or actions here
         }
         failure {
             echo 'Pipeline failed!'
+            // Add any failure notifications or actions here
         }
     }
 }
-
