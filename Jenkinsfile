@@ -26,7 +26,7 @@ pipeline {
             steps {
                 echo env.BUILD_ID
                 echo env.BUILD_NUMBER
-                //echo env.JENKINS_HOME
+                echo env.JENKINS_HOME
             }
         }
     }
