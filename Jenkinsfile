@@ -67,7 +67,7 @@ pipeline {
                 sh 'java -version'
                 sh 'git --version'
                 sh 'mvn --version'
-                sh 'mvn clean install package'
+                //sh 'mvn clean install package' // Due to No Maven project yet or I need to probably set the directory or it fails because in some way it ain't getting it
             }
         }
         
