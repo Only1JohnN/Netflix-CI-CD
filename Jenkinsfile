@@ -49,10 +49,27 @@ pipeline {
         stage('Merge Check') {
             steps {
                 script {
-                    def githubToken = credentials('My GitHub Access Token') // Retrieve the GitHub token from Jenkins credentials
+                    // Retry logic for GitHub API calls
+                    def retryCount = 3
+                    def githubToken = credentials('My GitHub Access Token')
                     def pullRequestNumber = env.CHANGE_ID
-                    def pullRequestInfo = sh(script: "curl -s -H 'Authorization: Bearer ${githubToken}' https://api.github.com/repos/Only1JohnN/Netflix-CI-CD/pulls/${pullRequestNumber}", returnStdout: true).trim()
-                    def mergeable = sh(script: "echo '${pullRequestInfo}' | jq -r '.mergeable'", returnStdout: true).trim()
+                    def pullRequestInfo
+                    def mergeable
+                    
+                    for (int i = 1; i <= retryCount; i++) {
+                        try {
+                            pullRequestInfo = sh(script: "curl -s -H 'Authorization: Bearer ${githubToken}' https://api.github.com/repos/Only1JohnN/Netflix-CI-CD/pulls/${pullRequestNumber}", returnStdout: true).trim()
+                            mergeable = sh(script: "echo '${pullRequestInfo}' | jq -r '.mergeable'", returnStdout: true).trim()
+                            break // Exit loop if successful
+                        } catch (Exception e) {
+                            if (i < retryCount) {
+                                echo "GitHub API call failed. Retrying... Attempt ${i} of ${retryCount}"
+                            } else {
+                                echo "GitHub API call failed after ${retryCount} attempts. Exiting..."
+                                throw e // Re-throw exception after retries
+                            }
+                        }
+                    }
         
                     if (mergeable == 'true') {
                         echo 'Pull request can be merged'
