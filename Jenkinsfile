@@ -84,7 +84,7 @@ pipeline {
         stage('Software Versions & Build Maven Project') {
             steps {
                 echo 'Hello World from Jenkins Pipeline'
-                echo $PATH
+                //echo $PATH
                 sh 'java -version'
                 sh 'git --version'
                 sh 'mvn --version'
