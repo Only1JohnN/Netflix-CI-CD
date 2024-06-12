@@ -48,10 +48,13 @@ pipeline {
 
         stage('Merge Check') {
             steps {
-                // Check if the pull request can be merged
                 script {
-                    def pullRequestStatus = sh(script: 'git status', returnStatus: true)
-                    if (pullRequestStatus == 0) {
+                    def githubToken = credentials('My GitHub Access Token') // Retrieve the GitHub token from Jenkins credentials
+                    def pullRequestNumber = env.CHANGE_ID
+                    def pullRequestInfo = sh(script: "curl -s -H 'Authorization: Bearer ${githubToken}' https://api.github.com/repos/Only1JohnN/Netflix-CI-CD/pulls/${pullRequestNumber}", returnStdout: true).trim()
+                    def mergeable = sh(script: "echo '${pullRequestInfo}' | jq -r '.mergeable'", returnStdout: true).trim()
+        
+                    if (mergeable == 'true') {
                         echo 'Pull request can be merged'
                     } else {
                         echo 'Pull request cannot be merged'
@@ -67,7 +70,7 @@ pipeline {
                 sh 'java -version'
                 sh 'git --version'
                 sh 'mvn --version'
-                //sh 'mvn clean install package' // Due to No Maven project yet or I need to probably set the directory or it fails because in some way it ain't getting it
+                //sh 'mvn clean install package' // Uncomment this line once you have a Maven project
             }
         }
         
