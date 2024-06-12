@@ -4,6 +4,7 @@ pipeline {
     environment {
         // Set the GitHub repository URL
         GIT_URL = 'https://github.com/Only1JohnN/Netflix-CI-CD.git'
+        PATH = '/usr/local/apache-maven-3.9.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
     }
 
     stages {
@@ -66,6 +67,7 @@ pipeline {
         stage('Software Versions & Build Maven Project') {
             steps {
                 echo 'Hello World from Jenkins Pipeline'
+                echo $PATH
                 sh 'java -version'
                 sh 'git --version'
                 sh 'mvn --version'
