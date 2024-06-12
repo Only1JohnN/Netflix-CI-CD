@@ -44,6 +44,21 @@ pipeline {
                 }
             }
         }
+
+        stage('Merge Check') {
+            steps {
+                // Check if the pull request can be merged
+                script {
+                    def pullRequestStatus = sh(script: 'git status', returnStatus: true)
+                    if (pullRequestStatus == 0) {
+                        echo 'Pull request can be merged'
+                    } else {
+                        echo 'Pull request cannot be merged'
+                        // Perform actions like notifying developers or rejecting the pull request
+                    }
+                }
+            }
+        }
         
         stage('Software Versions & Build Maven Project') {
             steps {
