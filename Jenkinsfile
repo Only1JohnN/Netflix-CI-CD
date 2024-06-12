@@ -45,15 +45,17 @@ pipeline {
             }
         }
         
-        stage('Hello') {
+        stage('Software Versions & Build Maven Project') {
             steps {
                 echo 'Hello World from Jenkins Pipeline'
-                //echo java -version
-                //echo 'git --version'
+                sh 'java -version'
+                sh 'git --version'
+                sh 'mvn --version'
+                sh 'mvn clean install package'
             }
         }
         
-        stage('Software Versions') {
+        stage('Build Verisons') {
             steps {
                 echo "BUILD_ID: ${env.BUILD_ID}"
                 echo "BUILD_NUMBER: ${env.BUILD_NUMBER}"
