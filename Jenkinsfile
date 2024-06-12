@@ -4,6 +4,7 @@ pipeline {
     environment {
         // Set the GitHub repository URL
         GIT_URL = 'https://github.com/Only1JohnN/Netflix-CI-CD.git'
+        PATH = "/usr/local/apache-maven-3.9.7/bin:$PATH"
     }
 
     stages {
